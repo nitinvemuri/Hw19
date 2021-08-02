@@ -5,12 +5,13 @@ const request = indexedDB.open('budget_tracker', 1)
 request.onupgradeneeded = function(event) {
     const db = event.target.result;
     db.createObjectStore("transactions", { autoIncrement: true});
+    // is this even going throught to heroki??????????????
 }
 
 request.onsuccess = function(event) {
     db = event.target.result;
     if (navigator.onLine) {
-        budgetUpload();
+        uploadBudget();
     }
 };
 
@@ -25,7 +26,7 @@ function saveRecord(record){
     budgetObjectStore.add(record);
 };
 
-function budgetUpload() {
+function uploadBudget() {
     const transaction = db.transaction(["transactions"], "readwrite");
     const budgetObjectStore = transaction.objectStore("transactions");
     const getAll = budgetObjectStore.getAll();
@@ -65,4 +66,4 @@ function deletePending() {
     store.clear();
 }
 
-window.addEventListener("online", budgetUpload)
+window.addEventListener("online", uploadBudget)
