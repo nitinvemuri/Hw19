@@ -19,15 +19,15 @@ request.onerror = function(event) {
 };
 
 function saveRecord(record){
-    const transaction = db.transaction(["budget"], "readwrite");
+    const transaction = db.transaction(["transactions"], "readwrite");
 
-    const budgetObjectStore = transaction.objectStore("budget");
+    const budgetObjectStore = transaction.objectStore("transactions");
     budgetObjectStore.add(record);
 };
 
 function budgetUpload() {
-    const transaction = db.transaction(["budget"], "readwrite");
-    const budgetObjectStore = transaction.objectStore("budget");
+    const transaction = db.transaction(["transactions"], "readwrite");
+    const budgetObjectStore = transaction.objectStore("transactions");
     const getAll = budgetObjectStore.getAll();
 
     getAll.onsuccess = function() {
@@ -45,8 +45,8 @@ function budgetUpload() {
                 if (serverResponse.message) {
                     throw new Error(serverResponse);
                 }
-                const transaction = db.transaction(['budget'], 'readwrite');
-                const budgetObjectStore = transaction.objectStore('budget');
+                const transaction = db.transaction(['transactions'], 'readwrite');
+                const budgetObjectStore = transaction.objectStore('transactions');
                 budgetObjectStore.clear();
                 alert('all budget items are submitted')
             })
@@ -60,8 +60,8 @@ function budgetUpload() {
 
 
 function deletePending() {
-    const transaction = db.transaction(["budget"], "readwrite");
-    const store = transaction.objectStore("budget");
+    const transaction = db.transaction(["transactions"], "readwrite");
+    const store = transaction.objectStore("transactions");
     store.clear();
 }
 
