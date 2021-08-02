@@ -4,14 +4,13 @@ const request = indexedDB.open('budget_tracker', 1)
 
 request.onupgradeneeded = function(event) {
     const db = event.target.result;
-    db.createObjectStore("transactions", { autoIncrement: true});
-    // is this even going throught to heroki??????????????
+    db.createObjectStore('budget', { autoIncrement: true,});
 }
 
 request.onsuccess = function(event) {
     db = event.target.result;
     if (navigator.onLine) {
-        uploadBudget();
+        budgetUpload();
     }
 };
 
@@ -20,15 +19,15 @@ request.onerror = function(event) {
 };
 
 function saveRecord(record){
-    const transaction = db.transaction(["transactions"], "readwrite");
+    const transaction = db.transaction(["budget"], "readwrite");
 
-    const budgetObjectStore = transaction.objectStore("transactions");
+    const budgetObjectStore = transaction.objectStore("budget");
     budgetObjectStore.add(record);
 };
 
-function uploadBudget() {
-    const transaction = db.transaction(["transactions"], "readwrite");
-    const budgetObjectStore = transaction.objectStore("transactions");
+function budgetUpload() {
+    const transaction = db.transaction(["budget"], "readwrite");
+    const budgetObjectStore = transaction.objectStore("budget");
     const getAll = budgetObjectStore.getAll();
 
     getAll.onsuccess = function() {
@@ -46,8 +45,8 @@ function uploadBudget() {
                 if (serverResponse.message) {
                     throw new Error(serverResponse);
                 }
-                const transaction = db.transaction(['transactions'], 'readwrite');
-                const budgetObjectStore = transaction.objectStore('transactions');
+                const transaction = db.transaction(['budget'], 'readwrite');
+                const budgetObjectStore = transaction.objectStore('budget');
                 budgetObjectStore.clear();
                 alert('all budget items are submitted')
             })
@@ -61,9 +60,9 @@ function uploadBudget() {
 
 
 function deletePending() {
-    const transaction = db.transaction(["transactions"], "readwrite");
-    const store = transaction.objectStore("transactions");
+    const transaction = db.transaction(["budget"], "readwrite");
+    const store = transaction.objectStore("budget");
     store.clear();
 }
 
-window.addEventListener("online", uploadBudget)
+window.addEventListener("online", budgetUpload)
